@@ -1,4 +1,4 @@
-module github.com/progrium/qmux/demos/groktunnel
+module github.com/flaccid/container-groktunnel/cmd/groktunnel
 
 go 1.16
 
