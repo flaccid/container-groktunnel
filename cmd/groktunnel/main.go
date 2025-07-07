@@ -46,7 +46,6 @@ func main() {
 			fatal(err)
 			go join(conn, ch)
 		}
-		return
 	}
 
 	// server usage: groktunnel [-h=<hostname>] [-b=<bind ip>]
