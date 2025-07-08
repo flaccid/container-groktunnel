@@ -9,7 +9,16 @@ WORKING_DIR := $(shell pwd)
 
 .DEFAULT_GOAL := help
 
-.PHONY: build
+.PHONY: docker-build
+
+build-bin:: ## builds the groktunnel binary
+		cd cmd/groktunnel && go build -o ../../bin/groktunnel
+
+run-bin:: ## runs the groktunnel binary
+		./bin/groktunnel
+
+install-bin: ## installs the groktunnel binary to ~/go/bin
+		cp -v ./bin/groktunnel /usr/local/bin/
 
 docker-release:: docker-build docker-push ## Builds and pushes the docker image to the registry
 
@@ -22,11 +31,11 @@ docker-build:: ## builds the docker image locally
 			-t $(IMAGE_TAG) \
 				$(WORKING_DIR)
 
-docker-build-debian:: ## builds the docker image locally (debian version)
+docker-build-alpine:: ## builds the docker image locally (alpine version)
 		@docker build  \
 			--pull \
-			-f Dockerfile.debian \
-			-t $(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):debian \
+			-f Dockerfile.alpine \
+			-t $(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):alpine \
 				$(WORKING_DIR)
 
 docker-build-clean:: ## cleanly builds the docker image locally
@@ -45,9 +54,17 @@ docker-run:: ## Runs the docker image
 			-it \
 			--rm \
 			-p 9999:9999 \
-				$(IMAGE_TAG)
+				$(IMAGE_TAG) $(ARGS)
 
-docker-run-alpine:: ## Runs a plain alpine container for development, detached
+docker-run-alpine:: ## Runs the docker image
+		docker run \
+			--name groktunnel \
+			-it \
+			--rm \
+			-p 9999:9999 \
+				$(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):alpine
+
+docker-run-dev:: ## Runs a plain alpine container for development, detached
 		docker run \
 			--name groktunnel \
 			-itd \

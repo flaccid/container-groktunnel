@@ -33,11 +33,11 @@ jobs:
           tags: flaccid/groktunnel:latest
           labels: ${{ steps.meta.outputs.labels }}
 
-    #   - name: Build and push container image - debian version
-    #     uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
-    #     with:
-    #       context: .
-    #       file: ./Dockerfile.debian
-    #       push: true
-    #       tags: flaccid/groktunnel:debian
-    #       labels: ${{ steps.meta.outputs.labels }}
+      - name: Build and push container image - alpine version
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile.alpine
+          push: true
+          tags: flaccid/groktunnel:alpine
+          labels: ${{ steps.meta.outputs.labels }}
